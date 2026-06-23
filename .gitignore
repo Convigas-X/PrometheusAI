@@ -11,3 +11,6 @@ npm-debug.log*
 
 # Claude Code local (personal) settings — may contain machine-specific data/secrets
 .claude/settings.local.json
+
+# Local secret dump for Vercel env setup — NEVER commit
+vercel-env.txt

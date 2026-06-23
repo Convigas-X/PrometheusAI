@@ -72,6 +72,7 @@ The orchestrator (`app/api/chat/route.ts`) persists your message **before** any 
 - ⌨️ **Word‑by‑word streaming** with a blinking gold cursor.
 - 🧩 **Live code preview** — runnable HTML/SVG renders in a **sandboxed** iframe; Markdown + math (KaTeX) + syntax highlighting throughout.
 - 🎨 **Warm Editorial Luxury** — Cormorant Garamond + DM Sans, sharp edges, gold accents, floating shapes, and a custom flame favicon. Reduced‑motion aware.
+- 📲 **Installable PWA** — add Prometheus to your phone’s home screen or your desktop and launch it in its own window, complete with a themed icon, splash colors, and an offline fallback via a service worker.
 
 ---
 

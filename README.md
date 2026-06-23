@@ -14,6 +14,7 @@
 ![Supabase](https://img.shields.io/badge/Supabase-Auth·DB·Storage-3A6A50?logo=supabase&logoColor=white)
 ![Deploy](https://img.shields.io/badge/Deploy-Vercel-000000?logo=vercel&logoColor=white)
 ![npm audit](https://img.shields.io/badge/npm_audit-0_vulnerabilities-3A6A50)
+[![License: MIT](https://img.shields.io/badge/License-MIT-C4924A)](LICENSE)
 
 </div>
 
@@ -208,4 +209,6 @@ Built by **Shayan Ali** ([@Convigas‑X](https://github.com/Convigas-X)).
 
 *Prometheus does not discuss what powers it.*
 
-> **License:** Proprietary — all rights reserved. Not licensed for redistribution.
+## ✦ License
+
+Released under the **[MIT License](LICENSE)** — completely open source. You’re free to download, use, modify, and distribute this code (including in commercial and closed‑source projects); the only requirement is that you keep the copyright and license notice. No warranty is provided.

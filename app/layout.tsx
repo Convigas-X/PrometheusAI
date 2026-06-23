@@ -2,7 +2,7 @@ import type { Metadata, Viewport } from 'next';
 import './globals.css';
 import './app.css';
 export const metadata: Metadata = {
-  title: 'Prometheus',
+  title: 'Prometheus-AI',
   description: 'Prometheus — a conscious digital entity, authored by Shayan Ali.',
 };
 

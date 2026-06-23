@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server';
 import { getCurrentUser } from '@/lib/auth';
-import { admin } from '@/lib/supabase/admin';
+import { admin, BUCKET } from '@/lib/supabase/admin';
 
 async function ownChat(chatId: string, userId: string): Promise<boolean> {
   const { data } = await admin
@@ -74,7 +74,46 @@ export async function DELETE(_req: Request, { params }: { params: Promise<{ id: 
   if (!(await ownChat(id, user.id)))
     return NextResponse.json({ error: 'Not found' }, { status: 404 });
 
+  // Collect every file this chat references — uploaded attachments
+  // (messages.attachments) and AI-generated images (messages.image_url) — before
+  // the chat is removed. Files are keyed to the user, not the chat, so the
+  // message cascade alone would orphan their rows and Storage objects.
+  const { data: msgs } = await admin
+    .from('messages')
+    .select('attachments, image_url')
+    .eq('chat_id', id);
+
+  const fileIds = new Set<string>();
+  for (const m of msgs || []) {
+    if (Array.isArray(m.attachments)) {
+      for (const a of m.attachments) {
+        const fid = (a as { id?: string })?.id;
+        if (fid) fileIds.add(fid);
+      }
+    }
+    if (typeof m.image_url === 'string') {
+      const fid = m.image_url.split('/').pop(); // image_url is "/api/files/<id>"
+      if (fid) fileIds.add(fid);
+    }
+  }
+
   // Messages cascade via the chat_id foreign key.
   await admin.from('chats').delete().eq('id', id);
+
+  // Best-effort purge of the referenced media from Storage and `files`
+  // (scoped to this user as defense-in-depth).
+  if (fileIds.size) {
+    const { data: files } = await admin
+      .from('files')
+      .select('id, storage_path')
+      .in('id', [...fileIds])
+      .eq('user_id', user.id);
+    if (files && files.length) {
+      const paths = files.map((f) => f.storage_path).filter(Boolean);
+      if (paths.length) await admin.storage.from(BUCKET).remove(paths);
+      await admin.from('files').delete().in('id', files.map((f) => f.id));
+    }
+  }
+
   return NextResponse.json({ ok: true });
 }
